@@ -62,7 +62,7 @@ required | 否 | 判断一个参数是否存在 |
 使用前需引用
 
 ```lua
-local helper = loadfile(ngx.var.root .. "/system/helper/global_helper.lua")()
+local helper = loadfile(ngx.var.root .. "/system/helper/Global_helper.lua")()
 ```
 
 #### 字符串转换成整数
@@ -96,3 +96,63 @@ local str = "a|b|c"
 local delimiter = "|"
 local result = helper.split(str, delimiter)
 ```
+### Json 处理辅助函数
+
+使用前需引用
+
+```lua
+local json = loadfile(ngx.var.root .. "/system/helper/Json.lua")()
+```
+
+#### 将变量编码成json字符串，当为空时编码成对象
+
+encode_empty_as_object(var)
+
+参数:
+
+* var(mixed),待编码的变量
+
+返回：
+失败时返回nil, 成功时返回编码后的json字符串(string)
+
+例子：
+
+```lua
+local var = {
+	["a"] = "ddd",
+	["b"] = "ccc"
+}
+local result = json.encode_empty_as_object(var)
+```
+
+#### 将变量编码成json字符串，当为空时编码成数组
+
+encode_empty_as_array(var)
+
+参数:
+
+* var(mixed),待编码的变量
+
+返回：
+失败时返回nil, 成功时返回编码后的json字符串(string)
+
+例子：
+
+```lua
+local var = {
+	["a"] = "ddd",
+	["b"] = "ccc"
+}
+local result = json.encode_empty_as_array(var)
+```
+
+#### 将json字符串解析成变量
+
+decode(str)
+
+参数:
+
+* str(string),待解析的json字符串
+
+返回：
+失败时返回nil, 成功时会返回一个解析之后的变量(mixed)

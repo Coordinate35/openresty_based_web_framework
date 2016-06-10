@@ -143,7 +143,7 @@ function Form_validation.calculate(param1, param2, operator)
 end
 
 function Form_validation.check(params, check_content)
-	local form_check_item_config = loadfile(ngx.var.root .. "/v2/config/form_check_item_config.lua")()
+	local form_check_item_config = loadfile(ngx.var.root .. "/application/config/form_check_item_config.lua")()
 	local params_stack = {}
 	local operator_stack = {}
 	local params_stack_pointer = 1
