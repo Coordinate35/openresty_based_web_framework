@@ -1,4 +1,51 @@
+local const = loadfile(ngx.var.root .. "/application/config/config.lua")()
+
 local Loader = {}
+
+Loader._core_path = {
+    const.SYSTEM_PATH .. "/core",
+    const.APP_PATH .. "/core"
+}
+Loader._helper_path = {
+    const.SYSTEM_PATH .. "/helper",
+    const.APP_PATH .. "/helper"
+}
+Loader._library_path = {
+    const.SYSTEM_PATH .. "/library",
+    const.APP_PATH .. "/library"
+}
+Loader._lang_path = {
+    const.SYSTEM_PATH .. "/lang",
+    const.APP_PATH .. "/lang"
+}
+Loader._database_path = {
+    const.SYSTEM_PATH .. "/database"
+}
+Loader._config_path = {
+    const.APP_PATH .. "/config"
+}
+Loader._model_path = {
+    const.APP_PATH .. "/model"
+}
+Loader._service_path = {
+    const.APP_PATH .. "/service"
+}
+Loader._stage_path = {
+    const.APP_PATH .. "/stage"
+}
+Loader._controller_path = {
+    const.APP_PATH .. "/controller"
+}
+Loader._view_path = {
+    const.APP_PATH .. "/view"
+}
+
+Loader._core = {}
+Loader._helper = {}
+Loader._library = {}
+Loader._lang = {}
+Loader._database = {}
+Loader._config = {}
 
 function Loader:load_core(core_name)
     return self:_load(core_name, "core")
@@ -108,52 +155,6 @@ function Loader:_file_exists(file_name)
 end
 
 function Loader:new()
-    local const = loadfile(ngx.var.root .. "/application/config/config.lua")()
-    self._core_path = {
-        const.SYSTEM_PATH .. "/core",
-        const.APP_PATH .. "/core"
-    }
-    self._helper_path = {
-        const.SYSTEM_PATH .. "/helper",
-        const.APP_PATH .. "/helper"
-    }
-    self._library_path = {
-        const.SYSTEM_PATH .. "/library",
-        const.APP_PATH .. "/library"
-    }
-    self._lang_path = {
-        const.SYSTEM_PATH .. "/lang",
-        const.APP_PATH .. "/lang"
-    }
-    self._database_path = {
-        const.SYSTEM_PATH .. "/database"
-    }
-    self._config_path = {
-        const.APP_PATH .. "/config"
-    }
-    self._model_path = {
-        const.APP_PATH .. "/model"
-    }
-    self._service_path = {
-        const.APP_PATH .. "/service"
-    }
-    self._stage_path = {
-        const.APP_PATH .. "/stage"
-    }
-    self._controller_path = {
-        const.APP_PATH .. "/controller"
-    }
-    self._view_path = {
-        const.APP_PATH .. "/view"
-    }
-
-    self._core = {}
-    self._helper = {}
-    self._library = {}
-    self._lang = {}
-    self._database = {}
-    self._config = {}
-
     return setmetatable({}, {__index = self})
 end
 
