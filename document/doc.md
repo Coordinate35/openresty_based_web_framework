@@ -2,6 +2,88 @@
 
 ## 类库参考
 
+### 加载模块
+
+框架启动的时候自动加载此类，以后加载代码都适用此类加载
+对于没有场景限制的类，无论调用多少次加载函数，都只会加载一次，然后就缓存起来
+
+#### 加载核心函数
+
+load_core(core_name)
+
+参数：core_name(string),核心模块名
+返回：table，加载的核心模块
+
+#### 加载辅助函数
+
+load_helper(helper_name)
+
+参数：helper_name(string),辅助函数名
+返回：table，加载的辅助函数 
+
+#### 加载类库
+
+load_library(library_name)
+
+参数：library_name(string),类库名
+返回：table，加载的类库
+
+#### 加载语言集合
+
+load_lang(lang_name)
+
+参数：lang_name(string),语言集合名
+返回：table，加载的语言集合
+
+#### 加载数据库类
+
+load_database(database_name)
+
+参数：database_name(string),数据库类名
+返回：table，加载的数据库类
+
+#### 加载配置
+
+load_config(config_name)
+
+参数：config_name(string),配置名
+返回：table，加载的配置
+
+#### 加载模型
+
+load_model(model_name)
+
+参数：model_name(string),模型名
+返回：table，加载的模型
+
+#### 加载服务层
+
+load_service(service_name)
+
+参数：service_name(string),服务层名
+返回：table，加载的服务
+
+#### 加载执行阶段
+
+load_stage(stage_name)
+
+参数：stage_name(string)，执行阶段名
+返回：table，加载的执行阶段
+
+#### 加载控制器
+
+load_controller(controller_name)
+
+参数：controller_name(string),控制器名
+返回：table，加载的控制其
+
+#### 加载视图
+
+load_view(view_name)
+
+参数：view_name(string),加载的视图名
+返回：table，加载的视图
+
 ### 表单验证模块
 
 使用前需先加载此类，在system/library/Form_validation.lua
