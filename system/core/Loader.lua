@@ -6,36 +6,46 @@ Loader._core_path = {
     const.SYSTEM_PATH .. "/core",
     const.APP_PATH .. "/core"
 }
+
 Loader._helper_path = {
     const.SYSTEM_PATH .. "/helper",
     const.APP_PATH .. "/helper"
 }
+
 Loader._library_path = {
     const.SYSTEM_PATH .. "/library",
     const.APP_PATH .. "/library"
 }
+
 Loader._lang_path = {
     const.SYSTEM_PATH .. "/lang",
     const.APP_PATH .. "/lang"
 }
+
 Loader._database_path = {
     const.SYSTEM_PATH .. "/database"
 }
+
 Loader._config_path = {
     const.APP_PATH .. "/config"
 }
+
 Loader._model_path = {
     const.APP_PATH .. "/model"
 }
+
 Loader._service_path = {
     const.APP_PATH .. "/service"
 }
+
 Loader._stage_path = {
     const.APP_PATH .. "/stage"
 }
+
 Loader._controller_path = {
     const.APP_PATH .. "/controller"
 }
+
 Loader._view_path = {
     const.APP_PATH .. "/view"
 }
