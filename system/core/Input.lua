@@ -39,9 +39,9 @@ function Input:cookie(var_name, is_xss_filter_open)
     return self:_fetch_from_array(self._cookie_array, var_name, is_xss_filter_open)
 end
 
-function Input:server(var_name, is_xss_filter_open)
-    return self:_fetch_from_array(self._server_array, var_name, is_xss_filter_open)
-end
+-- function Input:server(var_name, is_xss_filter_open)
+--     return self:_fetch_from_array(self._server_array, var_name, is_xss_filter_open)
+-- end
 
 function Input:get_post(var_name, is_xss_filter_open)
     if not self._get_array then
@@ -70,9 +70,25 @@ function Input:post(var_name, is_xss_filter_open)
 end
 
 function Input:_fetch_from_array(array, index, is_xss_filter_open)
+    local output
+    local value
+
+    if ("table" == type(index)) then
+        output = {}
+        for key, _ in pairs(array) do
+            output[key] = self:_fetch_from_array(array, key, is_xss_filter_open)
+        end
+        return output
+    end
+
+    if array[index] then
+        value = array[index]
+    end
 end
 
 function Input:_filter_xss(data)
+    local is_image = false
+    return self:_security:xss_clean(data, is_image)
 end
 
 function Input:_init_post_data()
@@ -97,15 +113,31 @@ function Input:_init_body_data()
     end
 end
 
+function Input:_init_cookie()
+    local cookie_key = {}
+    for key, _ in pairs(ngx.var) do
+        local match
+        match = ngx.re.match(key, "cookie_")
+        if match then
+            table.insert(cookie_key, key)
+        end
+    end
+    for _, value in pairs(cookie_key) do
+        self._cookie_array[value] = ngx.var[value]
+    end
+end
+
 function Input:new(root)
     self._loader = root.loader
     self._is_xss_filter_open = false;
+    self._security = self._loader:load_core("Security"):new()
 
     ngx.req.read_body()
     self:_init_post_data()
     self:_init_get_data()
     self:_init_headers()
     self:_init_body_data()
+    self:_init_cookie()
 
     print("Input Class Initialized")
     return setmetatable({}, {__index = self})
