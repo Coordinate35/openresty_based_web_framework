@@ -73,7 +73,7 @@ function Input:_fetch_from_array(array, index, is_xss_filter_open)
     local output
     local value
 
-    if ("table" == type(index)) then
+    if "table" == type(index) then
         output = {}
         for key, _ in pairs(array) do
             output[key] = self:_fetch_from_array(array, key, is_xss_filter_open)
@@ -83,7 +83,52 @@ function Input:_fetch_from_array(array, index, is_xss_filter_open)
 
     if array[index] then
         value = array[index]
+    else
+        local iterator
+        local match = {}
+        local m
+        local count = 0
+        iterator, self._err = ngx.re.gmatch(index, "/(?:^[^\[]+)|\[[^]]*\]/")
+        if self._err then
+            print(self._err)
+        end
+        if iterator then
+            while true do
+                m, self._err = iterator()
+                if self._err then
+                    print(self._err)
+                end
+                if m then
+                    count = count + 1
+                    table.insert(match, m)
+                else
+                    break
+                end
+            end
+        end
+        if 1 < count then
+            local k
+            value = array
+            for key, value in pairs(match) do
+                k = self._global_helper.trim(value, "[]")
+                if 0 == #k then
+                    break
+                end
+                if not value[k] then
+                    return nil
+                else
+                    value = value[k]
+                end
+            end
+        else
+            return nil
+        end
     end
+
+    if true == is_xss_filter_open then
+        return self._security:xss_clean(value)
+    end
+    return value
 end
 
 function Input:_filter_xss(data)
@@ -129,6 +174,7 @@ end
 
 function Input:new(root)
     self._loader = root.loader
+    self._global_helper = root.global_helper
     self._is_xss_filter_open = false;
     self._security = self._loader:load_core("Security"):new()
 
