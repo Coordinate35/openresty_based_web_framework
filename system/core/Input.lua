@@ -14,22 +14,55 @@ function Input:get_ip_address()
 end
 
 -- Receive a table or a series of value
-function Input:set_cookie(name, value, expire, domain, path, prefix, secure, http_only)
+function Input:set_cookie(...)
+    local parameter = {...}
+    local cookie_param = {}
+    local cookie_item = {"name", "value", "expire", "domain", "path", "prefix", "secure", "http_only"}
+    local number = #parameter
+    if 1 == number and "table" == type(parameter[1]) then
+        for key, value in pairs(cookie_item) do
+            cookie_param[cookie_item[key]] = parameter[0][key]
+        end
+    else
+        for key, value in pairs(cookie_item) do
+            cookie_param[cookie_item[key]] = parameter[key]
+        end
+    end
+
+    local cookie = cookie_param[name] .. "=" .. cookie_param[value]
+    for key = 3, ＃cookie_item do
+        if nil != cookie_param[cookie_item[key]] then
+            cookie = cookie .. ";" .. cookie_item[key] .. "=" .. cookie_param[cookie_item[key]] 
+        end
+    end
+    table.insert(ngx.header["Set-Cookie"], cookie);
 end
 
 function Input:get_method(return_upper)
+    local method_name = ngx.req.get_method()
+    if not return_upper or false == return_upper then
+        return string.upper(method_name)
+    end
+    return string.lower(method_name)
 end
 
 function Input:is_ajax_request()
 end
 
 function Input:get_request_headers(is_xss_filter_open)
+    local headers = {};
+    for key, value in pairs(self.headers) do
+        headers[key] = self:_fetch_from_array(self._headers, key, is_xss_filter_open)
+    end
+    return headers
 end
 
 function Input:get_request_header(header_name, is_xss_filter_open)
+    return self:_fetch_from_array(self._headers, header_name, is_xss_filter_open)
 end
 
 function Input:get_user_agent(is_xss_filter_open)
+    return self:_fetch_from_array(self._headers, "User-Agent", is_xss_filter_open)
 end
 
 function Input:is_valid_ip()
